@@ -1,3 +1,4 @@
+import pandas as pd
 import numpy as np
 import streamlit as st
 from math import ceil
@@ -27,37 +28,21 @@ def lowess(x, y, f, iterations):
 
     return yest
 
-# Streamlit app
-st.title("LOWESS Smoothing with Streamlit")
-st.write("""
-    This app applies LOWESS (Locally Weighted Scatterplot Smoothing) to noisy data.
-""")
-
-# Sidebar parameters
-n = st.sidebar.slider("Number of data points", 50, 200, 100)
-f = st.sidebar.slider("Smoothing factor (f)", 0.01, 1.0, 0.25)
-iterations = st.sidebar.slider("Number of iterations", 1, 10, 3)
-
 # Generate test data
+n = 100
 x = np.linspace(0, 2 * np.pi, n)
-np.random.seed(0)  # For reproducibility
 y = np.sin(x) + 0.3 * np.random.randn(n)
+f = 0.25
+iterations = 3
 
 # Apply LOWESS smoothing
 yest = lowess(x, y, f, iterations)
 
 # Plot the results
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.plot(x, y, "r.", label='Noisy data')
-ax.plot(x, yest, "b-", label='LOWESS smoothing')
-ax.legend()
-
-# Display the plot in the Streamlit app
-st.pyplot(fig)
-
-# Display data
-st.write("Generated data:")
-st.write(pd.DataFrame({'x': x, 'y': y, 'yest': yest}))
-
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, "r.", label='Noisy data')
+plt.plot(x, yest, "b-", label='LOWESS smoothing')
+plt.legend()
+plt.show()
 
    
